@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Презентация: Каталог автомобилей с пробегом</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .slide-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 80px;
+            scroll-snap-align: start;
+            background: white;
+            position: relative;
+        }
+
+        .slide:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 14px;
+            color: #999;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #1a1a1a;
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 1000px;
+        }
+
+        h2 {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 24px;
+            color: #34495e;
+            margin: 30px 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .subtitle {
+            font-size: 22px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 50px;
+            font-weight: 400;
+        }
+
+        .content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid #3498db;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .feature-card h4 {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            color: #555;
+            font-size: 16px;
+            line-height: 1.6;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .architecture-diagram {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 6px 30px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+
+        .arch-layer {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 30px 0;
+            gap: 20px;
+        }
+
+        .arch-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 35px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .arch-box.frontend {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .arch-box.backend {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .arch-box.data {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .arch-box.integration {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .arrow-down {
+            text-align: center;
+            font-size: 30px;
+            color: #3498db;
+            margin: 15px 0;
+        }
+
+        .mvp-section {
+            background: white;
+            border-radius: 12px;
+            padding: 35px;
+            margin: 25px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .icon {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .highlight-box ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .highlight-box ul li {
+            padding: 12px 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .highlight-box ul li:before {
+            content: "→";
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .arch-layer {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        
+        <!-- Слайд 8 -->
+        <div class="slide">
+            <div class="slide-number">Слайд 8</div>
+            <div class="content">
+                <h2>Продуктовое решение: обзор</h2>
+                <p class="subtitle">Что мы хотим сделать</p>
+
+                <div class="highlight-box">
+                    <h3 style="color: white; margin-top: 0;">Ключевые принципы</h3>
+                    <ul>
+                        <li>Новый раздел на существующем сайте: <strong>«Автомобили с пробегом»</strong> / <strong>«Сертифицированные авто»</strong></li>
+                        <li>Интегрирован в текущую навигацию (хедер, меню, главная)</li>
+                        <li>Единый стек с основным сайтом</li>
+                        <li>Адаптивная версия (mobile-first — 70%+ трафика)</li>
+                        <li>Интеграция с CRM/DMS дилерских центров для автоматического обновления стока</li>
+                    </ul>
+                </div>
+
+                <div class="architecture-diagram">
+                    <h3 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Техническая архитектура</h3>
+                    
+                    <div class="arch-layer">
+                        <div class="arch-box frontend">
+                            <div style="font-size: 24px; margin-bottom: 10px;">🎨</div>
+                            <div>Frontend Layer</div>
+                            <div style="font-size: 13px; margin-top: 8px; opacity: 0.9;">React / Vue.js<br>Responsive Design</div>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">↓</div>
+
+                    <div class="arch-layer">
+                        <div class="arch-box backend">
+                            <div style="font-size: 24px; margin-bottom: 10px;">⚙️</div>
+                            <div>Backend Layer</div>
+                            <div style="font-size: 13px; margin-top: 8px; opacity: 0.9;">Node.js / Python<br>REST API / GraphQL</div>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">↓</div>
+
+                    <div class="arch-layer">
+                        <div class="arch-box data" style="flex: 0.48;">
+                            <div style="font-size: 24px; margin-bottom: 10px;">💾</div>
+                            <div>Database</div>
+                            <div style="font-size: 13px; margin-top: 8px; opacity: 0.9;">PostgreSQL / MongoDB</div>
+                        </div>
+                        <div class="arch-box integration" style="flex: 0.48;">
+                            <div style="font-size: 24px; margin-bottom: 10px;">🔗</div>
+                            <div>Integrations</div>
+                            <div style="font-size: 13px; margin-top: 8px; opacity: 0.9;">CRM/DMS<br>Payment Gateway</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Слайд 9 -->
+        <div class="slide">
+            <div class="slide-number">Слайд 9</div>
+            <div class="content">
+                <h2>MVP: ключевой функционал</h2>
+                <p class="subtitle">Что входит в первую версию</p>
+
+                <div class="features-grid">
+                    <!-- Каталог и поиск -->
+                    <div class="feature-card">
+                        <h4><span class="icon">🔍</span> Каталог и поиск</h4>
+                        <ul class="feature-list">
+                            <li>Листинг автомобилей с карточками (фото, цена, год, пробег, комплектация, локация ДЦ)</li>
+                            <li>Фильтры: марка, модель, год, пробег, цена, тип кузова, КПП, привод, цвет, город/ДЦ</li>
+                            <li>Сортировка: по цене, пробегу, дате размещения, году выпуска</li>
+                        </ul>
+                    </div>
+
+                    <!-- Карточка автомобиля -->
+                    <div class="feature-card">
+                        <h4><span class="icon">🚗</span> Карточка автомобиля</h4>
+                        <ul class="feature-list">
+                            <li>Галерея фото (8–15 фото по стандарту съёмки)</li>
+                            <li>Основные характеристики и комплектация</li>
+                            <li>Краткий отчёт об истории: кол-во владельцев, тип использования, сервисная история</li>
+                            <li>Значок <strong>«Сертифицированный»</strong></li>
+                            <li>Цена, информация о возможности кредита (ориентировочный платёж)</li>
+                            <li>Привязка к конкретному ДЦ (адрес, карта, часы работы)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Лидогенерация -->
+                    <div class="feature-card">
+                        <h4><span class="icon">📩</span> Лидогенерация</h4>
+                        <ul class="feature-list">
+                            <li>Кнопка «Записаться на осмотр»</li>
+                            <li>Форма «Обратный звонок»</li>
+                            <li>Кнопка «Получить предложение по кредиту»</li>
+                            <li>Форма «Оценить мой автомобиль для trade-in» (базовая: марка, модель, год, пробег, фото)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Админ-панель -->
+                    <div class="feature-card">
+                        <h4><span class="icon">⚙️</span> Админ-панель</h4>
+                        <ul class="feature-list">
+                            <li>Загрузка и редактирование объявлений (ручная + импорт из DMS/CSV)</li>
+                            <li>Модерация и публикация</li>
+                            <li>Управление статусами (в наличии / забронирован / продан)</li>
+                            <li>Базовая аналитика: просмотры карточки, кол-во лидов по авто</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mvp-section">
+                    <h4 style="color: #2c3e50; margin-bottom: 20px;"><span class="icon">📊</span> Аналитика</h4>
+                    <ul class="feature-list">
+                        <li>Подключение стандартных событий в GA4 / Яндекс Метрику</li>
+                        <li>Воронка: просмотр каталога → карточка → заявка → лид в CRM</li>
+                        <li>UTM-разметка для маркетинговых кампаний</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Плавная прокрутка между слайдами
+        document.addEventListener('keydown', function(e) {
+            const slides = document.querySelectorAll('.slide');
+            const currentSlide = Math.round(window.scrollY / window.innerHeight);
+            
+            if (e.key === 'ArrowDown' && currentSlide < slides.length - 1) {
+                slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp' && currentSlide > 0) {
+                slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
